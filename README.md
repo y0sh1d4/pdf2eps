@@ -29,11 +29,6 @@ $ ./pdf2eps.sh -f hoge.pdf
 $ ./pdf2eps.sh -n -f hoge.pdf
 ```
 
-pdfcropのマージン(--margins)オプションを指定 (既定値は10)
-```bash
-$ ./pdf2eps.sh -m 20 -f hoge.pdf
-```
-
 出力フォルダを指定 (./hoge.pdf -> ./out/hoge.eps)
 ```bash
 $ ./pdf2eps.sh -o ./out -f hoge.pdf
@@ -47,5 +42,9 @@ $ ./pdf2eps.sh -o ./src -b ./dst
 ## オプション使用時の順序
 
 ```bash
-./pdf2eps [-n] [-m <margin>] [-o <out>] [-b|-f <target>]
+./pdf2eps [-n] [-o <out>] [-b|-f <target>]
 ```
+
+## pdfcrop/pdftopsのオプションを変更したい場合
+
+`pdf2eps.sh`を開き，`$pdfcrop_args`/`$pdftop_args`を編集

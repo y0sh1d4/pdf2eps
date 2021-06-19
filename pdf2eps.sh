@@ -1,6 +1,16 @@
 # !/bin/bash
 
-VERSION=1.0.0
+VERSION=1.1.0
+
+#####################
+# 設定変更はここから 
+#####################
+# pdfcropのオプション引数
+$pdfcrop_args="--margins 10"
+
+# pdftopsのオプション引数
+$pdftops_args=""
+#####################
 
 # 使い方の表示
 function usage(){
@@ -8,7 +18,7 @@ cat <<_EOT_
 $(basename ${0}) is a tool for cropping PDF and convert to EPS file.
 
 Usage:
-    $(basename ${0}) [-v|-h|-i] | [-n|] [-o dir|] [-m margins|] [-b|-f target]
+    $(basename ${0}) [-v|-h|-i] | [-n|] [-o dir|] [-b|-f target]
 
 Examples:
     $(basename ${0}) -n -o ./hoge -f fuga.pdf
@@ -19,7 +29,6 @@ options:
     -h               print this  
     -i               install pdfcrop and pdftops
     -n               NOT overwrite existing file(s)
-    -m <margins>     '--margins' option argument for pdfcrop
     -o <dir>         output to the directory
     -b <target>      batch process all PDF files in the folder
     -f <target>      process target PDF file
@@ -86,13 +95,13 @@ function file(){
 
     if ($process_continue); then
 
-        pdfcrop --margins $margins $target_file tmp.pdf
+        pdfcrop $pdfcrop_args $target_file tmp.pdf
         
         if ($set_out); then
-            pdftops tmp.pdf $out/$fname.eps
+            pdftops $pdftops_args tmp.pdf $out/$fname.eps
 
         else
-            pdftops tmp.pdf $dname/$fname.eps
+            pdftops $pdftops_args tmp.pdf $dname/$fname.eps
 
         fi
 
@@ -106,7 +115,6 @@ function file(){
 # フラグ
 no_overwrite=false
 set_out=false
-margins=10
 
 # オプション対応
 while getopts vhinm:o:b:f: opt; do
@@ -129,10 +137,6 @@ while getopts vhinm:o:b:f: opt; do
 
         n)  # 上書き禁止
             no_overwrite=true
-        ;;
-
-        m) # pdfcropの--marginsオプションにわたす引数
-            margins=$OPTARG
         ;;
 
         o)  # 出力先フォルダ
