@@ -48,3 +48,5 @@ $ ./pdf2eps.sh -o ./src -b ./dst
 ## pdfcrop/pdftopsのオプションを変更したい場合
 
 `pdf2eps.sh`を開き，`$pdfcrop_args`/`$pdftop_args`を編集
+
+`$pdfcrop`の`--margins`として`10`を設定済み
