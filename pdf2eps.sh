@@ -6,10 +6,10 @@ VERSION=1.1.0
 # 設定変更はここから 
 #####################
 # pdfcropのオプション引数
-$pdfcrop_args="--margins 10"
+pdfcrop_args="--margins 10"
 
 # pdftopsのオプション引数
-$pdftops_args=""
+pdftops_args=""
 #####################
 
 # 使い方の表示
