@@ -36,13 +36,18 @@ $ ./pdf2eps.sh -o ./out -f hoge.pdf
 
 フォルダ内のファイルをバッチ処理 (./src/\*.pdf -> ./dst/\*.eps)
 ```bash
-$ ./pdf2eps.sh -o ./src -b ./dst
+$ ./pdf2eps.sh -o ./dst -b ./src
+```
+
+複数ページあるPDFファイルを分割して変換
+```bash
+$ ./pdf2eps.sh -o ./dst -p ./src.pdf
 ```
 
 ## オプション使用時の順序
 
 ```bash
-./pdf2eps [-n] [-o <out>] [-b|-f <target>]
+./pdf2eps [-n] [-o <out>] [-b|-f|-p <target>]
 ```
 
 ## pdfcrop/pdftopsのオプションを変更したい場合
