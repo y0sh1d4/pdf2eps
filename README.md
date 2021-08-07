@@ -2,6 +2,15 @@
 
 PDFファイルをクロップしてEPSファイルに変換する
 
+## インストール
+
+```bash
+$ cd $HOME
+$ git clone https://github.com/TestOfFujinolab/pdf2eps.git
+$ echo 'PATH=$PATH:$HOME/pdf2eps' >> .bashrc
+$ source .bashrc
+```
+
 ## 使い方
 
 使い方の表示
