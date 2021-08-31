@@ -6,61 +6,50 @@ PDFファイルをクロップしてEPSファイルに変換する
 
 ```bash
 $ cd $HOME
+$ sudo apt install make
+$ sudo apt-get install libboost-all-dev
 $ git clone https://github.com/TestOfFujinolab/pdf2eps.git
-$ echo 'PATH=$PATH:$HOME/pdf2eps' >> .bashrc
-$ source .bashrc
+$ sudo make install
+```
+
+## アンインストール
+```bash
+$ sudo rm /usr/local/bin/pdf2eps
 ```
 
 ## 使い方
 
 使い方の表示
 ```bash
-$ ./pdf2eps.sh -h
+$ pdf2eps.sh --h
 ```
 
 バージョンの表示
 ```bash
-$ ./pdf2eps.sh -v
+$ pdf2eps.sh --v
 ```
 
 依存関係のインストール
 ```bash
-$ ./pdf2eps.sh -i
-```
-
-ファイルを処理 (./hoge.pdf -> ./hoge.eps)
-```bash
-$ ./pdf2eps.sh -f hoge.pdf
-```
-
-上書き禁止で処理 (バッチ処理の場合はそのファイルを無視)
-```bash
-$ ./pdf2eps.sh -n -f hoge.pdf
+$ pdf2eps.sh --i
 ```
 
 出力フォルダを指定 (./hoge.pdf -> ./out/hoge.eps)
 ```bash
-$ ./pdf2eps.sh -o ./out -f hoge.pdf
+$ pdf2eps.sh -o ./out hoge.pdf
 ```
 
 フォルダ内のファイルをバッチ処理 (./src/\*.pdf -> ./dst/\*.eps)
 ```bash
-$ ./pdf2eps.sh -o ./dst -b ./src
+$ pdf2eps.sh -b -o ./dst ./src
 ```
 
 複数ページあるPDFファイルを分割して変換
 ```bash
-$ ./pdf2eps.sh -o ./dst -p ./src.pdf
+$ pdf2eps.sh -d -o ./dst ./src.pdf
 ```
 
-## オプション使用時の順序
-
+PDFcropのmarginsを指定
 ```bash
-./pdf2eps [-n] [-o <out>] [-b|-f|-p <target>]
+$ pdf2eps.sh --margins 10 10 10 10 ./src.pdf
 ```
-
-## pdfcrop/pdftopsのオプションを変更したい場合
-
-`pdf2eps.sh`を開き，`$pdfcrop_args`/`$pdftop_args`を編集
-
-`$pdfcrop`の`--margins`として`10`を設定済み
