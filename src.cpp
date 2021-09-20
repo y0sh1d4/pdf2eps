@@ -160,11 +160,26 @@ void rename_files(fs::path src, fs::path textname)
         std::cout << "[Error] failued to open " << textname << std::endl;
         return;
     }
-    
+
+    // 読み込みついでに改行文字を取り除く
+    const std::string CR = "\r";
+    const std::string LF = "\n";
+    std::string::size_type pos = 0;
     std::vector<std::string> fnames;
     std::string tmp;
     while (getline(ifs, tmp))
+    {       
+        pos = tmp.find(CR);
+        if(pos != std::string::npos)
+            tmp.replace(pos, CR.length(), "");
+
+        pos = tmp.find(LF);
+        if(pos != std::string::npos)
+            tmp.replace(pos, LF.length(), "");
+
         fnames.push_back(tmp);
+    }
+        
 
     // Debug: check files in target folder
     // for(fs::path f: fnames)
