@@ -154,9 +154,10 @@ void rename_files(fs::path src, fs::path textname)
     //     std::cout << f << std::endl;
     // }
 
+    std::cout << textname << std::endl;
     std::ifstream ifs(textname.string());
     if(!ifs){
-        std::cout << "[Error] failued to open ./fnames.txt" << std::endl;
+        std::cout << "[Error] failued to open " << textname << std::endl;
         return;
     }
     
@@ -164,6 +165,12 @@ void rename_files(fs::path src, fs::path textname)
     std::string tmp;
     while (getline(ifs, tmp))
         fnames.push_back(tmp);
+
+    // Debug: check files in target folder
+    // for(fs::path f: fnames)
+    // {
+    //     std::cout << f << std::endl;
+    // }
 
     if(files.size() > fnames.size())
     {
@@ -173,7 +180,7 @@ void rename_files(fs::path src, fs::path textname)
     }
 
     std::cout << "Rename files..." << std::endl;
-    for(int i; i < files.size(); i++)
+    for(int i=0; i < files.size(); i++)
     {
         fs::path dst_fname = (files[i].parent_path()).append(fnames[i]+(files[i].extension()).string());
         std::cout << files[i].filename() << " -> " << dst_fname.filename() << std::endl;
