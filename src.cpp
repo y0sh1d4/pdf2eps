@@ -5,6 +5,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/program_options.hpp>
 #include <boost/format.hpp>
+#include <boost/range/algorithm.hpp>
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -133,14 +134,63 @@ int process_split(
 
 }
 
+void rename_files(fs::path src, fs::path textname)
+{
+    std::vector<fs::path> files;
+    int ret;
+    fs::directory_iterator end_itr;
+    for(fs::directory_iterator itr(src); itr!= end_itr; itr++)
+    {
+        if(itr->path().extension() == ".pdf" || itr->path().extension() == ".eps")
+        {
+            files.push_back(itr->path());
+        }
+    }
+    boost::sort(files);
+
+    // Debug: check files in target folder
+    // for(fs::path f: files)
+    // {
+    //     std::cout << f << std::endl;
+    // }
+
+    std::ifstream ifs(textname.string());
+    if(!ifs){
+        std::cout << "[Error] failued to open ./fnames.txt" << std::endl;
+        return;
+    }
+    
+    std::vector<std::string> fnames;
+    std::string tmp;
+    while (getline(ifs, tmp))
+        fnames.push_back(tmp);
+
+    if(files.size() > fnames.size())
+    {
+        std::cout << "[Error] the number of target filenames are not enough in ./fnames.txt" << std::endl;
+        std::cout << "[Error] (Number of files) " << files.size() << "  >  (Number of target filenames) " << fnames.size() << std::endl;
+        return;
+    }
+
+    std::cout << "Rename files..." << std::endl;
+    for(int i; i < files.size(); i++)
+    {
+        fs::path dst_fname = (files[i].parent_path()).append(fnames[i]+(files[i].extension()).string());
+        std::cout << files[i].filename() << " -> " << dst_fname.filename() << std::endl;
+        fs::rename(files[i], dst_fname);
+    }
+
+    return;
+}
+
 int main(int argc, char** argv)
 {
     // PROGRAM VERSION
-    const std::string VERSION = "pdf2eps 3.0.0";
+    const std::string VERSION = "pdf2eps 3.1.0";
 
     // 内部変数
     fs::path src, dst;
-    bool batch, split, eps;
+    bool batch, split, eps, rename;
     std::string pdfcrop_args = "";
     std::string pdftops_args = "";
     std::string margins;
@@ -155,6 +205,8 @@ int main(int argc, char** argv)
         ("batch, b", "(--b) batch process all PDF files in the folder")
         ("divide, d", "(--d) divide PDF file in each page")
         ("eps, e", "(--e) output as EPS file")
+        ("rename, r", 
+        "(--r) Rename output files based on textfile (~.txt), that has same name of corresponding source PDF file on same folder.")
         ("margins", po::value<std::vector<int>>()->multitoken(),
         "[PDFcrop option] <left> <top> <right> <bottom>,\ndefault=10 10 10 10")
         ("output, o", po::value<std::string>(),"(--o) destination directory\ndefault='./'")
@@ -220,6 +272,14 @@ int main(int argc, char** argv)
     } else
     {
         eps = false;
+    }
+
+    if(vm.count("rename"))
+    {
+        rename = true;
+    } else
+    {
+        rename = false;
     }
 
     if(vm.count("margins"))
@@ -304,6 +364,7 @@ int main(int argc, char** argv)
     std::cout << "Batch process            : " << std::boolalpha << batch << std::endl;
     std::cout << "Split PDF with each pages: " << std::boolalpha << split << std::endl;
     std::cout << "Output as eps            : " << std::boolalpha << eps << std::endl;
+    std::cout << "Rename output files      : " << std::boolalpha << rename << std::endl;
     std::cout << "pdfcrop arguments        : " << pdfcrop_args << std::endl;
     std::cout << "pdftops arguments        : " << pdftops_args << std::endl;
     std::cout << "Source file/folder       : " << src << std::endl;
@@ -320,6 +381,11 @@ int main(int argc, char** argv)
             {
                 if(itr->path().extension() == ".pdf")
                     ret = process_split(itr->path(), dst, pdfcrop_args, pdftops_args, eps);
+                if(rename)
+                    rename_files(
+                        dst / (itr->path()).stem(),
+                        (itr->path()).parent_path() / (((itr->path()).stem()).string() + ".txt")
+                        );
             } else
             {
                 if(itr->path().extension() == ".pdf")
@@ -331,6 +397,11 @@ int main(int argc, char** argv)
         if(split)
         {
             ret = process_split(src, dst, pdfcrop_args, pdftops_args, eps);
+            if(rename)
+                rename_files(
+                    dst / src.stem(),
+                    src.parent_path() / ((src.stem()).string() + ".txt")
+                    );
         } else
         {
             ret = process_file(src, dst, pdfcrop_args, pdftops_args, eps);
