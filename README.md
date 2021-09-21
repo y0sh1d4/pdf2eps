@@ -36,10 +36,10 @@ $ pdf2eps.sh --i
 
 出力フォルダを指定 (./hoge.pdf -> ./out/hoge.eps)
 ```bash
-$ pdf2eps.sh -o ./out hoge.pdf
+$ pdf2eps.sh -e -o ./out hoge.pdf
 ```
 
-フォルダ内のファイルをバッチ処理 (./src/\*.pdf -> ./dst/\*.eps)
+フォルダ内のファイルをバッチ処理 (./src/\*.pdf -> ./dst/\*.pdf)
 ```bash
 $ pdf2eps.sh -b -o ./dst ./src
 ```
