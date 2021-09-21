@@ -21,42 +21,45 @@ $ sudo rm /usr/local/bin/pdf2eps
 
 使い方の表示
 ```bash
-$ pdf2eps.sh --h
+$ pdf2eps --h
 ```
 
 バージョンの表示
 ```bash
-$ pdf2eps.sh --v
+$ pdf2eps --v
 ```
 
 依存関係のインストール
 ```bash
-$ pdf2eps.sh --i
+$ pdf2eps --i
 ```
 
-出力フォルダを指定 (./hoge.pdf -> ./out/hoge.eps)
+出力フォルダを指定 (./src.pdf -> ./out/src.eps)
 ```bash
-$ pdf2eps.sh -e -o ./out hoge.pdf
+$ pdf2eps --e --o ./out src.pdf
 ```
 
 フォルダ内のファイルをバッチ処理 (./src/\*.pdf -> ./dst/\*.pdf)
 ```bash
-$ pdf2eps.sh -b -o ./dst ./src
+$ pdf2eps --b --o ./dst ./src
 ```
 
 複数ページあるPDFファイルを分割して変換
 ```bash
-$ pdf2eps.sh -d -o ./dst ./src.pdf
+$ pdf2eps --d --o ./dst ./src.pdf
 ```
 
 PDFcropのmarginsを指定
 ```bash
-$ pdf2eps.sh --margins 10 10 10 10 ./src.pdf
+$ pdf2eps --margins 10 10 10 10 ./src.pdf
 ```
 
 ## (--dオプション時のみ) 出力ファイル名を指定する
 
 PDFファイルと同じ名前のテキストファイルを用意し，各ページに対して対応する出力ファイル名をページ順に改行して記載する． (拡張子不要)
+```bash
+$ pdf2eps --d --r test.pdf
+```
 
 ページ数よりもテキストファイルの記載数が少なければエラー．
 
