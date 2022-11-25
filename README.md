@@ -8,7 +8,7 @@ PDFファイルをクロップしてEPSファイルに変換する
 $ cd $HOME
 $ sudo apt install make
 $ sudo apt-get install libboost-all-dev
-$ git clone https://github.com/ri0044ep/pdf2eps.git
+$ git clone https://github.com/y0sh1d4/pdf2eps.git
 $ sudo make install
 ```
 
